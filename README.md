@@ -1,16 +1,24 @@
-# camera_marca_dagua
+# Câmera Marca D'água App 📸💧
 
-A new Flutter project.
+O **Câmera Marca D'água** é um aplicativo desenvolvido em Flutter que permite aos usuários capturarem imagens usando a câmera do dispositivo, adicionar uma marca d'água personalizada e salvar a imagem resultante. Esta README fornecerá informações essenciais sobre como configurar, executar e personalizar o aplicativo. 
 
-## Getting Started
+![Câmera Marca D'água App](app_screenshot.png)
 
-This project is a starting point for a Flutter application.
+## Recursos Principais 🚀
 
-A few resources to get you started if this is your first Flutter project:
+- Acesso à câmera do dispositivo para capturar imagens 📷.
+- Opção para adicionar uma marca d'água personalizada à imagem 💧.
+- Pré-visualização da imagem antes de salvar 👁️.
+- Salvamento da imagem resultante na galeria do dispositivo 💾.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Configuração do Ambiente 🛠️
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Certifique-se de ter as seguintes ferramentas instaladas antes de executar o aplicativo:
+
+- Flutter SDK
+- Dart SDK
+- Emulador ou dispositivo físico configurado para execução
+
+
+
+Sinta-se à vontade para copiar e colar este README em seu projeto!

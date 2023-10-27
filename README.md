@@ -1,8 +1,8 @@
 # Câmera Marca D'água App 📸💧
 
-O **Câmera Marca D'água** é um aplicativo desenvolvido em Flutter que permite aos usuários capturarem imagens usando a câmera do dispositivo, adicionar uma marca d'água personalizada e salvar a imagem resultante. Esta README fornecerá informações essenciais sobre como configurar, executar e personalizar o aplicativo. 
+O **Câmera Marca D'água** é um aplicativo desenvolvido em Flutter que permite aos usuários capturarem imagens usando a câmera do dispositivo, adicionar uma marca d'água personalizada e salvar a imagem resultante.
 
-![Câmera Marca D'água App](app_screenshot.png)
+![Câmera Marca D'água App]
 
 ## Recursos Principais 🚀
 

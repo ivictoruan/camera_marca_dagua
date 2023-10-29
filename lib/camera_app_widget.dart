@@ -7,8 +7,12 @@ class CameraMarcaDaguaAppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomeScreen(),
+    return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+        primaryColor: Colors.purple,
+      ),
+      home: const HomeScreen(),
     );
   }
 }

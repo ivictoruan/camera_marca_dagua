@@ -10,7 +10,7 @@ O **Câmera Marca D'água** é um aplicativo desenvolvido em Flutter que permite
 - Salvamento da imagem resultante na galeria do dispositivo 💾.
 
 ## Configuração do Ambiente 🛠️
-
+    
 Certifique-se de ter as seguintes ferramentas instaladas antes de executar o aplicativo:
 
 - Flutter SDK

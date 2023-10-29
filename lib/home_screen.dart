@@ -10,22 +10,20 @@ import 'package:image/image.dart' as img;
 import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   File? _selectedImage;
-  // Strings aleatórias para simular a localização.
-  final String _latitude = "-123123281231123";
-  final String _longitude = "-123123281231121";
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImage({bool? isGallery}) async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    final pickedImage = await picker.pickImage(
+      source: (isGallery ?? false) ? ImageSource.gallery : ImageSource.camera,
+    );
 
     if (pickedImage != null) {
       setState(() {
@@ -34,27 +32,30 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _addLocationToImage() async {
+  Future<void> _addWatermarkToImage() async {
+    if (_selectedImage == null) {
+      log('Nenhuma imagem selecionada.');
+      return;
+    }
+    const String customText = "Seu texto da marca d'agua aqui";
     if (_selectedImage == null) {
       return;
     }
-
-    final image = img.decodeImage(await _selectedImage!.readAsBytes());
-    final newImage = img.copyResize(image!, width: 800);
-
-    var textInfoIntoImage = img.drawString(
-      newImage,
-      img.arial_48,
-      30,
-      30,
-      '''
-Lati: $_latitude'
-Longi: $_longitude
-São Luís-MA
-      ''',
-      color: img.getColor(255, 255, 255),
+    final image = img.decodeImage(
+      await _selectedImage!.readAsBytes(),
     );
-    final modifiedImageBytes = img.encodeJpg(textInfoIntoImage);
+    final newImage = img.copyResize(
+      image!,
+      width: 800,
+    );
+    img.drawString(
+      newImage,
+      customText,
+      font: img.arial48,
+      wrap: true,
+    );
+
+    final modifiedImageBytes = img.encodeJpg(newImage);
     final directory = await getTemporaryDirectory();
     final imagePath = '${directory.path}/modified_image.jpg';
     final modifiedImageFile = File(imagePath)
@@ -65,12 +66,11 @@ São Luís-MA
     });
   }
 
-  Future<void> _saveImageWithMarcaDaguaToGallery(File? selectedImage) async {
+  Future<void> _saveImageWithWatermark(File? selectedImage) async {
     if (_selectedImage == null) {
       log('Nenhuma imagem selecionada.');
       return;
     }
-
     // Verifique se a permissão de acesso à galeria já foi concedida.
     if (await Permission.storage.isGranted) {
       try {
@@ -99,47 +99,90 @@ São Luís-MA
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Camera Marca Dagua App'),
+        title: const Text('Câmera Marca D\'agua App'),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            if (_selectedImage != null)
-              Image.file(
-                _selectedImage!,
-                width: 300,
-                height: 300,
-              ),
-            const SizedBox(height: 20),
+            Material(
+              elevation: 5,
+              shadowColor: Colors.purple[100],
+              color: Colors.grey[100],
+              child: _selectedImage != null
+                  ? Image.file(
+                      _selectedImage!,
+                      fit: BoxFit.contain,
+                      width: 350,
+                      height: 450,
+                    )
+                  : Container(
+                      width: 350,
+                      height: 500,
+                      color: Colors.grey[100],
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Escolha uma imagem \nou tira uma foto",
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                              width: 200,
+                              child: OutlinedButton.icon(
+                                onPressed: () async =>
+                                    await _pickImage(isGallery: true),
+                                icon: const Icon(Icons.file_upload_outlined),
+                                label: const Text('Galeria'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+            ),
+            const SizedBox(height: 40),
             SizedBox(
-              width: 300,
+              width: 200,
               child: OutlinedButton.icon(
-                onPressed: _pickImage,
-                icon: const Icon(Icons.image),
-                label: const Text('Escolher Imagem'),
+                onPressed: () async => await _pickImage(),
+                icon: const Icon(Icons.add_a_photo_outlined),
+                label: const Text('Câmera'),
               ),
             ),
-            
-            ElevatedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.location_on_outlined),
-              label: const Text('Buscar Localização (GPS/Coordenadas)'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _addLocationToImage,
-              child: const Text('Adicionar Localização'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () async =>
-                  _saveImageWithMarcaDaguaToGallery(_selectedImage),
-              child: const Text('Salvar Imagem'),
-            ),
+            if (_selectedImage != null)
+              SizedBox(
+                width: 200,
+                child: OutlinedButton.icon(
+                  onPressed: () async => await _pickImage(isGallery: true),
+                  icon: const Icon(Icons.file_upload_outlined),
+                  label: const Text('Galeria'),
+                ),
+              ),
           ],
         ),
       ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton.icon(
+            label: const Text('Add marca d\'agua'),
+            icon: const Icon(Icons.add),
+            onPressed: () async => await _addWatermarkToImage(),
+          ),
+          ElevatedButton.icon(
+            label: const Text('Salvar'),
+            icon: const Icon(Icons.save_alt_rounded),
+            onPressed: () async =>
+                await _saveImageWithWatermark(_selectedImage),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'dart:io';
@@ -52,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
       newImage,
       customText,
       font: img.arial48,
-      wrap: true,
     );
 
     final modifiedImageBytes = img.encodeJpg(newImage);
@@ -107,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             Material(
               elevation: 5,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               shadowColor: Colors.purple[100],
               color: Colors.grey[100],
               child: _selectedImage != null
@@ -119,25 +120,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   : Container(
                       width: 350,
                       height: 500,
-                      color: Colors.grey[100],
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: Colors.grey[100],
+                      ),
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            const SizedBox(height: 20),
                             const Text(
-                              "Escolha uma imagem \nou tira uma foto",
+                              "Escolha uma imagem \nou tire uma foto",
                               textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
                             const SizedBox(
                               height: 20,
                             ),
-                            SizedBox(
-                              width: 200,
-                              child: OutlinedButton.icon(
-                                onPressed: () async =>
-                                    await _pickImage(isGallery: true),
-                                icon: const Icon(Icons.file_upload_outlined),
-                                label: const Text('Galeria'),
+                            Expanded(
+                              child: Lottie.network(
+                                "https://lottie.host/0cb43298-eeae-42a0-83ca-82bbc68e026a/3ly97mLmp4.json",
+                                height: 100,
                               ),
                             ),
                           ],
@@ -145,24 +152,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
             ),
-            const SizedBox(height: 40),
-            SizedBox(
-              width: 200,
-              child: OutlinedButton.icon(
-                onPressed: () async => await _pickImage(),
-                icon: const Icon(Icons.add_a_photo_outlined),
-                label: const Text('Câmera'),
-              ),
-            ),
-            if (_selectedImage != null)
+            const SizedBox(height: 50),
+            // if (_selectedImage != null) ...{
+            if (true) ...{
               SizedBox(
-                width: 200,
+                width: 170,
+                child: OutlinedButton.icon(
+                  onPressed: () async => await _pickImage(),
+                  icon: const Icon(Icons.add_a_photo_outlined),
+                  label: const Text('Câmera'),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: 170,
                 child: OutlinedButton.icon(
                   onPressed: () async => await _pickImage(isGallery: true),
                   icon: const Icon(Icons.file_upload_outlined),
                   label: const Text('Galeria'),
                 ),
               ),
+            }
           ],
         ),
       ),
